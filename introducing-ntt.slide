@@ -1,0 +1,174 @@
+# Introducing ntt
+modern tools for TTCN-3
+26 Jan 2021
+Tags: ntt, TTCN-3, k3
+Summary: ntt is a free and open application stack by Nokia for testing with TTCN-3. It's written mostly in Go and aims to solve the problems we encountered during the last fifteen years of using and developing for TTCN-3. Such as project fragmentation, increasing maintenance effort, declining innovation, missing IDE support and more.
+
+Matthias Simon
+Software Engineer at Nokia
+matthias.simon@nokia.com
+https://nokia.github.io/ntt
+
+
+: Hello 
+: for 10 years developing our internal TTCN-3 tools for 4G and 5G
+: 3 years ago we've been given opportunity share out new TTCN-3 tool called ntt
+
+
+## TTCN-3 at Nokia (2008)
+
+Our Nokia internal toolset is called **k3**:
+* introduced 2008, quickly adopted throughout Nokia
+* really fast bytecode compiler:
+  * before: 100,000 lines of code in 20 minutes
+  * k3: 2,000,000 lines of code in less than a 1 minute
+* extensible runtime:
+  * machine readable log-files
+  * adapters and codec loaded during runtime
+  * millions of tests each day
+
+**We focus on k3 core; users develop adapters, codecs, post-processing tools, ...**
+
+: Why create a new tool and not just share our k3?
+
+
+## Why not open source k3?
+
+* thought about it
+* four major pain points
+* we can do better
+
+: and I believe we did
+
+## The Pain Points
+
+## Pain 1: Project fragmentation
+
+* duplication of adapters, codecs, tools, build-scripts, ...
+* unclear responsibilities
+* orphaned repositories
+* skyrocketing maintenance
+
+
+## Pain 2: Missing best practices
+
+A lot of insecurity.
+
+How to:
+* organize modules?
+* format code?
+* handle timeouts?
+* start a SUT?
+* synchronize when SUT is ready
+* integrate with your build-system?
+* test adapters?
+* write a asynchronous network adapter in C++?
+
+
+## Pain 3: C++
+
+Language issues:
+  * each programmer using a different subset of the language
+  * shortcomings in memory management, concurrency, network programming, ...
+
+Deployment issues:
+  * long compilation times
+  * uncontrolled dependencies (JSON, XML, ...)
+  * ABI complications (gcc4 vs. gcc5 vs. LLVM vs. LTO vs. libstdc++.so)
+
+Requires many external components to function:
+  * building, profiling, debugging, testing, formatting, ...
+
+: Similar with python: 2 vs 3, pip, ctypes, stack traces, ...
+
+
+## Pain 4: Latency
+
+Modern development has shifted. Users expect:
+  * automatic formatting
+  * automatic refactoring
+  * autocomplete
+  * go to definition
+  * warnings about code smell
+  * immediate feedback as you type
+
+Classic compiler architectures fail:
+  * too slow
+  * poorly operate on incorrect code
+  * no high fidelity syntax trees
+
+: too slow: remember 2mil in less than 1 minute?
+
+## Advent of 5G
+
+* We decided to do things differently
+* k3 was modernized and became **ntt**
+
+
+## Introducing ntt
+
+: pain points bit of a buzz kill
+
+
+## Goal
+
+The user should not be distracted by the TTCN-3 tool and focus on writing tests.
+
+**Designed to resolve the major pain points**
+* easy integration of third-party tools
+* consistent user interface for easier access to test environment
+* mostly written in Go
+* low latency compiler architecture
+
+
+## A young project
+
+* not all functionality is available already
+* available tools:
+  * "ntt show" queries test suite configuration
+  * "ntt list" filters modules, tests and imports
+  * "ntt lint" checks for code smells
+  * "ntt tags" generates a ctags file
+  * ...
+* available scripts:
+  * feature rich CMake Module
+  * gRPC/Protobuf descriptions
+
+and most importantly...
+
+
+## TTCN-3 Language Server
+
+## What's a language server?
+
+* usually started by an editor or IDE
+* helps understanding source code
+* provides features like go to definition, autocompletion, ...
+* like a plugin, which works for all IDEs, Vim, Emacs, ...
+
+Further reading:
+* [https://langserver.org/](https://langserver.org/)
+* [Official page for language server protocol specification](https://microsoft.github.io/language-server-protocol/)
+
+
+## How to install and use ntt as language server?
+
+For most editors ntt has to be installed and configured still manually.  
+But we are simplifying the process by deploying automatic installation:
+
+* [Vim](https://github.com/mattn/vim-lsp-settings)
+* [Microsoft Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=Nokia.ttcn3) (in progress)
+* Sublime (to be done)
+* ...
+
+## Focus
+
+Finishing the language server first brings the most benefits for users.
+
+Next planned language server features:
+* improve go to definition
+* add diagnostics for errros, warnings and code smells
+* add initial formatter
+* add autocompletion
+
+: We are motivated and we have many ideas, but this is for another talk.
